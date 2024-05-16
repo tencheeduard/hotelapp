@@ -1,7 +1,6 @@
 package com.tencheeduard.hotelapp.entities;
 
-
-import com.tencheeduard.hotelapp.embeddables.RoomId;
+import com.tencheeduard.hotelapp.embeddables.ReservationId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,18 +8,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
-public class Room {
+public class Reservation {
 
     @EmbeddedId
-    RoomId id;
+    ReservationId id;
 
-    Integer type;
+    @ManyToOne
+    Account account;
 
-    Float price;
-
-    Boolean isAvailable;
+    Boolean cancelled;
 
 }
