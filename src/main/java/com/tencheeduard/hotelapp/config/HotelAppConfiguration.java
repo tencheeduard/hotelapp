@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class HotelAppConfiguration {
 
     @Bean
-    public static GeographicDistanceStrategy getDistanceStrategy()
+    public GeographicDistanceStrategy getDistanceStrategy()
     {
         return new VincentyFormulaStrategy();
     }

@@ -1,21 +1,16 @@
 package com.tencheeduard.hotelapp.services;
 
 import com.tencheeduard.hotelapp.classes.Distance;
-import com.tencheeduard.hotelapp.config.HotelAppConfiguration;
-import com.tencheeduard.hotelapp.embeddables.Point;
-import com.tencheeduard.hotelapp.entities.Hotel;
+import com.tencheeduard.hotelapp.classes.Point;
 import com.tencheeduard.hotelapp.enums.Unit;
 import com.tencheeduard.hotelapp.geographicDistanceStrategies.GeographicDistanceStrategy;
 import com.tencheeduard.hotelapp.repositories.HotelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // not entirely sure what to call this
 @Service
-public class GeographicCoordinateService {
+public class WorldCoordinateService {
 
     @Autowired
     GeographicDistanceStrategy strategy;
@@ -42,10 +37,7 @@ public class GeographicCoordinateService {
 
         Distance distancePerLongDegree = new Distance(111412.84 * Math.cos(a.latitude) - 93.5 * Math.cos(3 * a.latitude) + 0.118 * Math.cos(5 * a.latitude), Unit.METERS);
 
-        if(Math.abs((b.longitude - a.longitude) * distancePerLongDegree.getValue()) > distance.toUnit(Unit.METERS).getValue() * 2.0)
-            return false;
-
-        return true;
+        return !(Math.abs((b.longitude - a.longitude) * distancePerLongDegree.getValue()) > distance.toUnit(Unit.METERS).getValue() * 2.0);
     }
 
 }

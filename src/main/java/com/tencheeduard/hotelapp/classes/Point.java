@@ -1,7 +1,6 @@
-package com.tencheeduard.hotelapp.embeddables;
+package com.tencheeduard.hotelapp.classes;
 
 
-import com.tencheeduard.hotelapp.classes.Distance;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +18,10 @@ public class Reservation {
     @EmbeddedId
     ReservationId id;
 
+    Date endDate;
+
     @ManyToOne
     Account account;
 
     Boolean cancelled;
-
 }

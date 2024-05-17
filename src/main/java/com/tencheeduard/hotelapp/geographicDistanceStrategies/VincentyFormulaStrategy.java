@@ -1,7 +1,7 @@
 package com.tencheeduard.hotelapp.geographicDistanceStrategies;
 
 import com.tencheeduard.hotelapp.classes.Distance;
-import com.tencheeduard.hotelapp.embeddables.Point;
+import com.tencheeduard.hotelapp.classes.Point;
 import com.tencheeduard.hotelapp.enums.Unit;
 
 public class VincentyFormulaStrategy implements GeographicDistanceStrategy {
