@@ -1,0 +1,25 @@
+<ng-template #content let-offcanvas>
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title" id="offcanvas-basic-title">{{title}}</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div #body class="offcanvas-body">
+		<div *ngFor="let hotel of hotels">
+			<button class="container rounded text-bg-primary p-3" (click)="app.openModal(hotel)">
+				<div>
+					<h2>{{hotel.hotel.name}}</h2>
+				</div>
+				<div>
+					Rating:
+					<ngb-rating [rate]="hotel.rating" />
+				</div>
+				<div>
+					Rooms Available: {{hotel.roomCount}}
+				</div>
+				<div>
+					<p><small>{{hotel.distance}} away</small></p>
+				</div>
+			</button>
+		</div>
+	</div>
+</ng-template>

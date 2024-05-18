@@ -2,14 +2,18 @@ package com.tencheeduard.hotelapp.controller;
 
 import com.tencheeduard.hotelapp.classes.Distance;
 import com.tencheeduard.hotelapp.classes.Point;
+import com.tencheeduard.hotelapp.entities.Account;
 import com.tencheeduard.hotelapp.entities.Hotel;
+import com.tencheeduard.hotelapp.entities.Review;
 import com.tencheeduard.hotelapp.entities.Room;
 import com.tencheeduard.hotelapp.enums.Unit;
 import com.tencheeduard.hotelapp.exceptions.ObjectNotFoundException;
+import com.tencheeduard.hotelapp.repositories.AccountRepository;
 import com.tencheeduard.hotelapp.repositories.RoomRepository;
 import com.tencheeduard.hotelapp.services.DateConverterService;
 import com.tencheeduard.hotelapp.services.HotelService;
 import com.tencheeduard.hotelapp.services.JSONParserService;
+import com.tencheeduard.hotelapp.singletons.TimeKeeper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -23,7 +27,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/hotels")
+@CrossOrigin("http://localhost:4200")
 public class HotelController {
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @Autowired
     HotelService hotelService;
@@ -32,14 +40,15 @@ public class HotelController {
     JSONParserService jsonParserService;
 
     @Autowired
-    RoomRepository roomRepository;
-
-    @Autowired
     DateConverterService dateConverterService;
 
+
+    // this shouldn't be here but i don't have anywhere else to put it at the moment
     @EventListener(ApplicationReadyEvent.class)
     public void start() throws FileNotFoundException {
         jsonParserService.parseHotels(ResourceUtils.getFile("classpath:static/hotels.json"));
+        Account user = new Account("User", "User", "", "pass123", "email@email.com", "0000000000", TimeKeeper.getDate());
+        accountRepository.save(user);
     }
 
     @GetMapping("/getHotelsInRadius")
@@ -77,6 +86,49 @@ public class HotelController {
 
         try{
             return hotelService.getAvailableRooms(hotelId, fromDate, toDate);
+        }
+        catch(ObjectNotFoundException e)
+        {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
+
+    @GetMapping("/getAllRooms")
+    public List<Room> getAllRooms(@RequestParam(name="hotel") Integer hotelId,
+                                        HttpServletResponse response)
+    {
+
+        try{
+            return hotelService.getAllRooms(hotelId);
+        }
+        catch(ObjectNotFoundException e)
+        {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
+
+    @GetMapping("/getRating")
+    public Float getRating(@RequestParam(name="hotel") Integer hotelId,
+                          HttpServletResponse response)
+    {
+        try{
+            return hotelService.getRating(hotelId);
+        }
+        catch(ObjectNotFoundException e)
+        {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
+
+    @GetMapping("/getReviews")
+    public List<Review> getReviews(@RequestParam(name="hotel") Integer hotelId,
+                                     HttpServletResponse response)
+    {
+        try{
+            return hotelService.getReviews(hotelId);
         }
         catch(ObjectNotFoundException e)
         {

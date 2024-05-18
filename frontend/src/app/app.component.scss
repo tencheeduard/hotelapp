@@ -1,0 +1,56 @@
+
+
+.modal-dialog.modal-dialog-slideout {
+	box-shadow: -10px 0px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.modal-dialog-slideout {
+	min-height: 100%;
+	margin: 0 0 0 auto;
+	background: #fff;
+}
+.modal.fade .modal-dialog.modal-dialog-slideout {
+	-webkit-transform: translate(100%, 0) scale(1);
+	transform: translate(100%, 0) scale(1);
+}
+.modal.fade.show .modal-dialog.modal-dialog-slideout {
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0);
+	display: flex;
+	align-items: stretch;
+	-webkit-box-align: stretch;
+	height: 100%;
+}
+.modal.fade.show .modal-dialog.modal-dialog-slideout .modal-body {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.modal-dialog-slideout .modal-content {
+	border: 0;
+}
+.modal-dialog-slideout .modal-header,
+.modal-dialog-slideout .modal-footer {
+	height: 69px;
+	display: block;
+}
+.modal-dialog-slideout .modal-header h5 {
+	float: left;
+}
+
+.custom-day {
+	text-align: center;
+	padding: 0.185rem 0.25rem;
+	display: inline-block;
+	height: 2rem;
+	width: 2rem;
+}
+.custom-day.focused {
+	background-color: #e6e6e6;
+}
+.custom-day.range,
+.custom-day:hover {
+	background-color: rgb(2, 117, 216);
+	color: white;
+}
+.custom-day.faded {
+	background-color: rgba(2, 117, 216, 0.5);
+}

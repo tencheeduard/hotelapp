@@ -3,6 +3,7 @@ package com.tencheeduard.hotelapp.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 
@@ -30,6 +31,7 @@ public class Review {
     @Column
     String body;
 
+    @Temporal(TemporalType.DATE)
     Date date;
 
     Boolean isPublic;

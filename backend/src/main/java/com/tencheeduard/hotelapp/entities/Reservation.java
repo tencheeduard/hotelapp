@@ -18,6 +18,7 @@ public class Reservation {
     @EmbeddedId
     ReservationId id;
 
+    @Temporal(TemporalType.DATE)
     Date endDate;
 
     @ManyToOne

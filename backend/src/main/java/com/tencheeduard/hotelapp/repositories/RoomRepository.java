@@ -10,5 +10,6 @@ import java.util.List;
 public interface RoomRepository extends CrudRepository<Room, RoomId> {
 
     List<Room> findRoomsById_HotelAndIsAvailableIsTrue(Hotel hotel);
+    List<Room> findRoomsById_Hotel(Hotel hotel);
 
 }

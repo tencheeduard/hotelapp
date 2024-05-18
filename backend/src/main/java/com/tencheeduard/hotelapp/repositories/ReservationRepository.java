@@ -20,4 +20,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Reser
             "AND (res.endDate NOT BETWEEN :start AND :end) " +
             "AND ((res.id.startDate < :start AND res.endDate < :start) OR (res.id.startDate > :end AND res.endDate > :end))")
     List<Reservation> findById_RoomAndOccupiedBetween(@Param("room")Room room,@Param("start") Date startDate,@Param("end") Date endDate);
+
+    List<Reservation> findByAccount_Username(String username);
+
+    List<Reservation> findByIdRoomAndAccountUsername(Room room, String username);
 }

@@ -8,19 +8,20 @@ import com.tencheeduard.hotelapp.exceptions.ObjectNotFoundException;
 import com.tencheeduard.hotelapp.exceptions.RoomOccupiedException;
 import com.tencheeduard.hotelapp.services.DateConverterService;
 import com.tencheeduard.hotelapp.services.ReservationService;
+import com.tencheeduard.hotelapp.singletons.Logger;
+import com.tencheeduard.hotelapp.singletons.TimeKeeper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/reservations")
+@CrossOrigin("http://localhost:4200")
 public class ReservationController {
 
     @Autowired
@@ -86,7 +87,8 @@ public class ReservationController {
     public void cancelReservation(@RequestBody Map<String, String> reservationData, HttpServletResponse response) {
         if(!reservationData.containsKey("hotelId") ||
                 !reservationData.containsKey("roomNumber") ||
-                !reservationData.containsKey("start"))
+                !reservationData.containsKey("start") ||
+                !reservationData.containsKey("username"))
         {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -96,8 +98,9 @@ public class ReservationController {
             Integer hotelId = Integer.parseInt(reservationData.get("hotelId"));
             Integer roomNumber = Integer.parseInt(reservationData.get("roomNumber"));
             Date start = dateConverterService.getDate(reservationData.get("start"));
+            String username = reservationData.get("username");
 
-            reservationService.cancelReservation(hotelId, roomNumber, start);
+            reservationService.cancelReservation(roomNumber, hotelId, start, username);
         }
         catch(ObjectNotFoundException e)
         {
@@ -120,6 +123,32 @@ public class ReservationController {
         {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/getReservations")
+    public List<Reservation> getReservations(@RequestParam(name="username") String username, HttpServletResponse response)
+    {
+        try {
+            return reservationService.getReservations(username);
+        }
+        catch(ObjectNotFoundException e)
+        {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            try {
+                // switch doesn't work here for some reason
+                if(e.clazz == Account.class)
+                    response.getWriter().write("ACCCOUNT_NOT_FOUND");
+            }
+            // this part is not that necessary anyway, just nice to have, so can just ignore it for now
+            catch (IOException e1) {
+                Logger.log(e1.getMessage());
+            }
+        }
+        catch(Exception e)
+        {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return null;
     }
 
 }

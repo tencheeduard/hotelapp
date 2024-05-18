@@ -28,7 +28,7 @@ public class ReviewService {
     @Autowired
     HotelRepository hotelRepository;
 
-    public Review createReview(String username, Integer roomId, Integer hotelId, String body, Byte rating, Boolean isPublic) throws ObjectNotFoundException, IllegalArgumentException {
+    public Review createReview(String username, Integer roomNumber, Integer hotelId, String body, Byte rating, Boolean isPublic) throws ObjectNotFoundException, IllegalArgumentException {
         if(rating > 5 || rating < 0)
             throw new IllegalArgumentException();
 
@@ -43,7 +43,7 @@ public class ReviewService {
         if(hotel==null)
             throw new ObjectNotFoundException(Hotel.class);
 
-        Room room = roomRepository.findById(new RoomId(hotel, roomId)).orElse(null);
+        Room room = roomRepository.findById(new RoomId(hotel, roomNumber)).orElse(null);
         if(room == null)
             throw new ObjectNotFoundException(Room.class);
 

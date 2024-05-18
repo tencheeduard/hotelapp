@@ -1,0 +1,84 @@
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Hotel Finder</a>
+        <a class="navbar-brand" href="">Hotel Finder</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <button class="btn btn-outline-success" (click)="openMyReservations()">My Reservations</button>
+        </div>
+        <div class="d-flex">
+            <input class="form-control me-2" type="number" [(ngModel)]="radius" placeholder="Radius" aria-label="Radius">
+            <button class="btn btn-outline-success" (click)="onclickbutton()">Search</button>
+        </div>
+    </div>
+</nav>
+
+<app-offcanvas></app-offcanvas>
+<app-map></app-map>
+
+<ng-template #modalcontent let-modal>
+	<div class="modal-header">
+        <div *ngIf="modalMode===0">
+            <h4 class="modal-title" id="modal-basic-title">{{selectedHotel.hotel.name}} </h4>
+            <a *ngIf="selectedHotel.distance != undefined">{{selectedHotel.distance}} away</a>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click'); this.closeModal()"></button>
+	</div>
+	<div class="modal-body">
+        <div *ngIf="modalMode===0" style="height:70vh; overflow-y: auto;">
+            <div>
+
+                <h3>Pick a Date Range to see available rooms</h3>
+                <ngb-datepicker #dp (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" />
+
+                <ng-template #t let-date let-focused="focused">
+                    <span
+                        class="custom-day"
+                        [class.focused]="focused"
+                        [class.range]="isRange(date)"
+                        [class.faded]="isHovered(date) || isInside(date)"
+                        (mouseenter)="hoveredDate = date"
+                        (mouseleave)="hoveredDate = null"
+                    >
+                        {{ date.day }}
+                    </span>
+                </ng-template>
+
+                <hr />
+            </div>
+            <h3>Rooms: </h3>
+            <div *ngFor="let room of availableRooms">
+                <button class="container rounded text-bg-light" style="width:25%; height:10vh;" (click)="selectRoom(room)">
+                    <p>Room {{room.id.roomNumber}}</p>
+                    <p>Price: {{room.price}}</p>
+                </button>
+            </div>
+            <button *ngIf="selectedRoom!=undefined && selectedRoom.id.roomNumber!==-1 && fromDate && toDate" class="container rounded text-bg-primary" style="width:10%" (click)="makeReservation()">Make Reservation</button>
+            <h4 *ngIf="madeReservation">Successfully made reservation!</h4>
+
+            <h3>Reviews: </h3>
+            <div *ngFor="let review of reviews">
+                <div class="container bg-light">
+                    <h4>{{review.account.firstName}} {{review.account.lastName}}</h4>
+                    <p>{{review.rating}}/5</p>
+                    <p>{{review.body}}</p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="modalMode===1" style="height:70vh; overflow-y: auto;">
+            <div *ngFor="let reservation of myReservations">
+                <div class="container bg-light">
+                    <h4>Reservation at {{reservation.id.room.id.hotel.name}}</h4>
+                    <h5>Room {{reservation.id.room.id.roomNumber}}</h5>
+                    <h5>From {{reservation.id.startDate.toDateString()}} to {{reservation.endDate.toDateString()}}</h5>
+                    <button class="btn" (click)="cancelReservation(reservation)">Cancel</button>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+	</div>
+</ng-template>
+
+<hr />

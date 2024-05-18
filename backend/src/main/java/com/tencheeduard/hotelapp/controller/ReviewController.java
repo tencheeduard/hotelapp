@@ -16,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reviews")
+@CrossOrigin("http://localhost:4200")
 public class ReviewController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class ReviewController {
     public void leaveReview(@RequestBody Map<String,String> reviewData, HttpServletResponse response)
     {
         if(!reviewData.containsKey("username") ||
-            !reviewData.containsKey("roomId") ||
+            !reviewData.containsKey("roomNumber") ||
             !reviewData.containsKey("hotelId") ||
             !reviewData.containsKey("body") ||
             !reviewData.containsKey("rating") ||
@@ -37,13 +38,13 @@ public class ReviewController {
 
         try {
             String username = reviewData.get("username");
-            Integer roomId = Integer.parseInt(reviewData.get("roomId"));
+            Integer roomNumber = Integer.parseInt(reviewData.get("roomNumber"));
             Integer hotelId = Integer.parseInt(reviewData.get("hotelId"));
             String body = reviewData.get("body");
             Byte rating = Byte.parseByte(reviewData.get("rating"));
             Boolean isPublic = Boolean.parseBoolean(reviewData.get("isPublic"));
 
-            Review review = reviewService.createReview(username, roomId, hotelId, body, rating, isPublic);
+            Review review = reviewService.createReview(username, roomNumber, hotelId, body, rating, isPublic);
         }
         catch(ObjectNotFoundException e)
         {

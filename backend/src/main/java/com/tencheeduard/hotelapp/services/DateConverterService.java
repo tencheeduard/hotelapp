@@ -27,13 +27,21 @@ public class DateConverterService {
     {
         Date date = null;
 
-        for(String format : validFormats)
-        {
-            date = tryGetDate(dateStr, format);
-
-            if(date!=null)
-                break;
+        // try this first
+        try {
+            date = new Date(Date.valueOf(dateStr).getTime());
         }
+        catch (Exception e)
+        { }
+
+        if(date==null)
+            for(String format : validFormats)
+            {
+                date = tryGetDate(dateStr, format);
+
+                if(date!=null)
+                    break;
+            }
 
         return date;
     }
